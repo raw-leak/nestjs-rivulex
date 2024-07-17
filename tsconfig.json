@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "declaration": true,
+        "removeComments": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "target": "es2021",
+        "sourceMap": true,
+        "incremental": true,
+        "skipLibCheck": true,
+        "strictNullChecks": false,
+        "noImplicitAny": false,
+        "strictBindCallApply": false,
+        "forceConsistentCasingInFileNames": false,
+        "noFallthroughCasesInSwitch": false,
+        "esModuleInterop": true,
+        "composite": true,
+        "outDir": "./dist", // Output directory for compiled files
+        "rootDir": "./lib", // Root directory of the source files
+        "strict": true, // Enable all strict type-checking options
+    },
+    "exclude": [
+        "node_modules",
+        "dist",
+        "tests",
+        "examples"
+    ],
+    "include": [
+        "lib/**/*"
+    ]
+}

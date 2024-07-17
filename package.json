@@ -1,0 +1,35 @@
+{
+  "name": "nestjs-rivulex",
+  "version": "1.0.0-beta.1",
+  "description": "Rivulex is a high-performance messaging library leveraging Redis Streams for reliable event-driven communication within distributed systems.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raw-leak/nestjs-rivulex.git"
+  },
+  "author": "Mykhaylo Gusak",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/raw-leak/nestjs-rivulex/issues"
+  },
+  "homepage": "https://github.com/raw-leak/nestjs-rivulex#readme",
+  "scripts": {
+    "lint": "eslint 'lib/**/*.{ts,tsx}'",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.3.10",
+    "@nestjs/microservices": "^10.3.10",
+    "rivulex": "^1.0.0-beta.4"
+  }
+}
