@@ -5,7 +5,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Last Tag](https://img.shields.io/github/v/tag/raw-leak/nestjs-rivulex?label=Last%20Tag)
 ![Version](https://img.shields.io/npm/v/nestjs-rivulex)
-![Dependencies](https://img.shields.io/david/raw-leak/nestjs-rivulex)
 ![Contributors](https://img.shields.io/github/contributors/raw-leak/nestjs-rivulex)
 </div>
 
