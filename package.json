@@ -10,6 +10,7 @@
   "license": "MIT",
   "type": "module",
   "main": "dist/index.js",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist/",
@@ -24,8 +25,10 @@
   },
   "homepage": "https://github.com/raw-leak/nestjs-rivulex#readme",
   "scripts": {
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc",
     "lint": "eslint 'lib/**/*.{ts,tsx}'",
-    "build": "tsc"
+    "test": "jest"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.10",
