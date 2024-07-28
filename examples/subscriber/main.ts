@@ -1,10 +1,10 @@
 import { NestFactory } from '@nestjs/core';
+import { MicroserviceOptions } from '@nestjs/microservices';
+
 import { AppModule } from './app.module';
 import { RivulexTransport, RivulexSubscriberConfig } from 'nestjs-rivulex';
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
-
     const rivulexConfig: RivulexSubscriberConfig = {
         redis: {
             host: 'localhost',
@@ -13,15 +13,11 @@ async function bootstrap() {
         // Additional configuration options if needed
     };
 
-    app.connectMicroservice({
-        transport: Transport.CUSTOM,
-        options: {
-            customTransport: new RivulexTransport(rivulexConfig),
-        },
+    const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
+        strategy: new RivulexTransport(rivulexConfig),
     });
 
-    await app.startAllMicroservices();
-    await app.listen(PORT);
+    await app.listen();
 }
 
 bootstrap();
