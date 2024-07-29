@@ -6,7 +6,7 @@ export { Action } from "./action.decorator"
 export { StreamAction } from "./stream-action.decorator"
 
 // params decorators
-export { FullEvent } from "./event.decorator"
+export { FullEvent } from "./full-event.decorator"
 
 export { EventAck } from "./event-ack.decorator"
 export { EventAttempt } from "./event-attempt.decorator"
