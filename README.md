@@ -73,9 +73,15 @@ async function bootstrap() {
 bootstrap();
 ```
 
-## Usage
+## Examples
 
-Once configured, use NestJS decorators to define message handlers for specific events. Here's an example using decorators to handle events:
+In this section, we will explore different ways of defining handlers in `nestjs-rivulex` using a single abstraction for a specific stream and a single abstraction with StreamAction decorators handling different actions for different streams.
+
+<details>
+<summary>More on Examples</summary>
+
+### Single Abstraction for a Specific Stream
+In this example, we use the `@Stream` decorator to define a single abstraction that handles multiple actions within a specific stream with `@Action` decorators. This approach is ideal when you want to organize event handlers for all actions associated with a particular stream in one place.
 
 ```typescript
 import { Done, Event, Action, Stream } from 'nestjs-rivulex';
@@ -113,6 +119,45 @@ export class UsersHandlers {
     }
 }
 ```
+
+### Single Abstraction Handling Actions for Different Streams
+In this example, we use the @StreamAction decorator to define a single abstraction that handles actions for different streams. This approach is useful when you need to manage event handlers for various streams in a single class, avoiding the need to create separate layers for each stream.
+
+```typescript
+import { Done, Event, StreamAction, FullEvent, EventPayload, EventId, EventHeaders, EventAttempt, EventAck } from 'nestjs-rivulex';
+
+interface CustomHeaders {
+    requestId: string;
+    userId: string;
+}
+
+interface OrderCreatedPayload {
+    orderId: string;
+    userId: string;
+}
+
+interface PaymentProcessedPayload {
+    paymentId: string;
+    orderId: string;
+}
+
+export class EventHandlers {
+
+    @StreamAction('orders', 'order_created')
+    async handleOrderCreated(event: Event<OrderCreatedPayload, CustomHeaders>) {
+        // Handle 'order_created' event
+        await event.ack();
+    }
+
+    @StreamAction('payments', 'payment_processed')
+    async handlePaymentProcessed(event: Event<PaymentProcessedPayload, CustomHeaders>) {
+        // Handle 'payment_processed' event
+        await event.ack();
+    }
+}
+
+```
+</details>
 
 ## Decorators
 
