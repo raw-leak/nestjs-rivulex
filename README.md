@@ -114,14 +114,14 @@ export class UsersHandlers {
 }
 ```
 
-### Decorators
+## Decorators
 
 `nestjs-rivulex` provides a comprehensive set of decorators to simplify and abstract the management of stream subscriptions, associating events with specific actions, and working with event parameters. These decorators help you organize your code in a clean and intuitive way, making it easier to define and handle events in your NestJS applications.
 
 <details>
 <summary>More on Decorators</summary>
 
-#### Class Decorators
+### Class Decorators
 **`@Stream(streamName: string)`** Decorate a class to specify the Redis stream name. This decorator indicates that the class contains methods to handle events from the specified Redis stream.
 
 
@@ -135,7 +135,7 @@ export class UsersHandlers {
 
 **Recommendation**: Use the `@Stream` with `@Action` decorators when you want to define a single abstraction to handle events from a specific stream. This approach helps you manage and organize event handlers for all actions within the same stream in a cohesive manner.
 
-#### Method Decorators
+### Method Decorators
 **`@Action(actionName: string)`** Decorate a method to handle a specific action within the stream.
 
 Example:
@@ -159,7 +159,7 @@ async handleUserCreated(event: Event<UserCreatedPayload, CustomHeaders>) {
 
 **Recommendation**: Use the `@StreamAction` decorator when you want a single abstraction to handle actions from different streams. This is particularly useful when you need to handle a few events from various streams. By grouping them together under the same abstraction, you avoid the need to create a separate layer for each stream, leading to a more streamlined and efficient event handling architecture.
 
-#### Parameter Decorators
+### Parameter Decorators
 Parameter decorators are used to extract specific parts of the event object and inject them as parameters into your method. If no parameter decorator is used, the entire event object is provided as the first argument.
 
 **`@FullEvent()`** Decorate a method parameter to extract the entire event object. Note that if no parameter decorator is used, the method will receive the full event object as the first argument by default.
@@ -216,7 +216,8 @@ async handleUserCreated(@EventAck() ack: Ack) {
 }
 ```
 
-#### Advance Decorators example
+### Advance Decorators Example
+
 In this section, we provide advanced examples demonstrating different combinations of class, method, and parameter decorators.
 
 ```typescript
@@ -300,7 +301,6 @@ export class UsersHandlers {
 
 ```
 </details>
-
 
 ## Configuration
 
