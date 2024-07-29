@@ -31,7 +31,7 @@ export class RivulexTransport extends Server implements CustomTransportStrategy 
    * @param {() => void} done - Callback function to signal that initialization is complete.
    * @returns {Promise<void>}
    */
-  listen = async (done: () => void) => {
+  public listen = async (done: () => void) => {
     this.log.log('Initializing Rivulex subscriber');
 
     // Register message handlers
