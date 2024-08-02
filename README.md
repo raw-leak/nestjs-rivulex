@@ -352,7 +352,7 @@ export class UsersHandlers {
 ### `RivulexSubscriberConfig`
 
 - **`redis`**: Configuration for the Redis connection, including options such as host, port, and authentication details.
-- **Additional Options**: Customize settings like `group`, `timeout`, `count`, `block`, and `retries` according to your application's needs.
+- **Additional Options**: Customize settings like `clientId`, `group`, `processTimeout`, `processConcurrency`, `fetchBatchSize`, `blockTime`, and `retries` according to your application's needs.
 
 For a complete list of additional settings and configuration details, visit the [Rivulex documentation](https://github.com/raw-leak/rivulex).
 

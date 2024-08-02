@@ -37,7 +37,7 @@ export class RivulexTransport extends Server implements CustomTransportStrategy 
     // Register message handlers
     for (const entry of this.messageHandlers.entries()) {
       const [streamName, action] = entry[0].split(":");
-      this.subscriber.streamAction(streamName, action, entry[1]);
+      this.subscriber.streamAction(streamName, action, entry[1] as any); // TODO: solve any
       this.log.log(`Registered handlers for stream "${streamName}" and action "${action}"`);
     }
 
