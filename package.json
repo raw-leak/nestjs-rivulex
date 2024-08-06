@@ -33,7 +33,7 @@
     "@nestjs/common": "^10.3.10",
     "@nestjs/microservices": "^10.3.10",
     "@nestjs/testing": "^10.3.10",
-    "rivulex": "1.0.0-beta.24"
+    "rivulex": "1.0.0-beta.26"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
