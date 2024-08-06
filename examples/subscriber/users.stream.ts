@@ -1,6 +1,4 @@
-import { Done, Event } from 'rivulex';
-import { Action } from '../../lib/decorators/action.decorator';
-import { Stream } from '../../lib/decorators/stream.decorator';
+import { Event, Action, Stream } from 'rivulex';
 
 interface CustomHeaders {
     requestId: string,
@@ -21,16 +19,16 @@ interface UserDeletedPayload {
 class UsersStream {
 
     @Action('user_created')
-    async handleUserCreated(event: Event<UserCreatedPayload, CustomHeaders>, done: Done) {
-        const { action, headers, payload, attempt } = event
+    async handleUserCreated(event: Event<UserCreatedPayload, CustomHeaders>) {
+        const { action, headers, payload, attempt, ack } = event
         // Handle 'user_created' event
-        await done()
+        await ack()
     }
 
     @Action('user_deleted')
-    async handleUserDeleted(event: Event<UserDeletedPayload, CustomHeaders>, done: Done) {
-        const { action, headers, payload, attempt } = event
+    async handleUserDeleted(event: Event<UserDeletedPayload, CustomHeaders>) {
+        const { action, headers, payload, attempt, ack } = event
         // Handle 'user_deleted' event
-        await done()
+        await ack()
     }
 }
