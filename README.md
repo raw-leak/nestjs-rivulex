@@ -26,9 +26,6 @@ With Rivulex, you can build scalable, reliable, and efficient messaging systems 
 
 ## Table of Contents
 
-- [Rivulex NestJS](#rivulex-nestjs)
-- [Key Features](#key-features)
-- [Use Cases](#use-cases)
 - [Rivulex](#rivulex)
 - [Installation](#installation)
 - [Rivulex Transport](#rivulex-transport)
