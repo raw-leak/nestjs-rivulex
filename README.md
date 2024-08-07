@@ -8,7 +8,7 @@
 ![Contributors](https://img.shields.io/github/contributors/raw-leak/nestjs-rivulex)
 </div>
 
-`nestjs-rivulex` provides a custom transport layer for integrating [Rivulex](https://github.com/raw-leak/rivulex) with NestJS applications. It leverages Rivulex’s Redis Streams-based messaging system and offers an easy-to-use abstraction for event-driven communication in NestJS.
+**Rivulex NestJS** provides custom transport, publisher, and trimmer abstractions for integrating [**Rivulex**](https://github.com/raw-leak/rivulex) with NestJS applications. It leverages Rivulex’s Redis Streams-based messaging system and offers an easy-to-use abstraction for event-driven communication in NestJS.
 
 ### Key Features
 - **At-Least-Once Delivery**: Rivulex ensures that every message is delivered at least once, making it suitable for scenarios where message loss is unacceptable.
