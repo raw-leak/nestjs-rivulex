@@ -1,14 +1,21 @@
 import { Module } from '@nestjs/common';
-import { RivulexModule } from "../../lib";
+import { RivulexPublisherModule } from "../../lib";
 
 @Module({
   imports: [
-    RivulexModule.forRootAsync({
+    RivulexPublisherModule.forRootAsync({
       useFactory: () => {
         return {
           redis: {},
           group: "group",
-          defaultStream: "default_stream"
+          defaultStream: "default_stream",
+          // setting trimmer (optional, read more about Trimmer)
+          trimmer: {
+            group: "group",
+            streams: ["default_stream"],
+            intervalTime: 86400000, // 24 hours
+            retentionPeriod: 604800000, // 7 days
+          }
         }
       },
       inject: []
