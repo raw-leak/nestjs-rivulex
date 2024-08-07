@@ -24,6 +24,47 @@
 
 With Rivulex, you can build scalable, reliable, and efficient messaging systems that are well-suited for modern distributed environments.
 
+## Table of Contents
+
+- [Rivulex NestJS](#rivulex-nestjs)
+- [Key Features](#key-features)
+- [Use Cases](#use-cases)
+- [Rivulex](#rivulex)
+- [Installation](#installation)
+- [Rivulex Transport](#rivulex-transport)
+  - [Configuration](#configuration)
+    - [`RivulexSubscriberConfig`](#rivulexsubscriberconfig)
+    - [Configure in `main.ts`](#configure-in-main-ts)
+    - [Custom Logger](#custom-logger)
+    - [Examples](#examples)
+      - [Single Abstraction for a Specific Stream](#single-abstraction-for-a-specific-stream)
+      - [Single Abstraction Handling Actions for Different Streams](#single-abstraction-handling-actions-for-different-streams)
+  - [Integration with Trimmer](#integration-with-trimmer)
+    - [Usage](#usage)
+- [Decorators](#decorators)
+  - [Class Decorators](#class-decorators)
+  - [Method Decorators](#method-decorators)
+  - [Parameter Decorators](#parameter-decorators)
+  - [Advance Decorators Example](#advance-decorators-example)
+- [Rivulex Publisher](#rivulex-publisher)
+  - [Overview](#overview)
+  - [Configuration](#configuration-1)
+    - [Synchronous Configuration](#synchronous-configuration)
+    - [Asynchronous Configuration](#asynchronous-configuration)
+  - [Usage](#usage-1)
+  - [Integration with Trimmer](#integration-with-trimmer-1)
+    - [Usage](#usage-2)
+  - [For More Details](#for-more-details)
+- [Rivulex Trimmer](#rivulex-trimmer)
+  - [Overview](#overview-1)
+  - [Configuration](#configuration-2)
+    - [Synchronous Configuration](#synchronous-configuration-1)
+    - [Asynchronous Configuration](#asynchronous-configuration-1)
+  - [Usage](#usage-3)
+- [Contributing](#contributing)
+- [License](#license)
+- [Support](#support)
+
 
 ## Rivulex
 For more details about Rivulex, including its features and API documentation, visit the Rivulex [GitHub repository](https://github.com/raw-leak/rivulex).
