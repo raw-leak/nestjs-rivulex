@@ -36,17 +36,29 @@ To install `nestjs-rivulex`, use npm or yarn:
 npm install nestjs-rivulex
 ```
 
-## Configuration
+## Rivulex Transport
+The `RivulexTransport` class is a custom transport strategy for NestJS that integrates with the Rivulex messaging system. This transport layer allows NestJS applications to use Rivulex for message handling and processing, leveraging the high-performance capabilities of Redis Streams.
 
-### Configure in `main.ts`
+<details>
+<summary>Read more on Rivulex Transport</summary>
 
+### Configuration
+
+#### `RivulexSubscriberConfig`
+
+- **`redis`**: Configuration for the Redis connection, including options such as host, port, and authentication details.
+- **Additional Options**: Customize settings like `clientId`, `group`, `processTimeout`, `processConcurrency`, `fetchBatchSize`, `blockTime`, and `retries` according to your application's needs.
+
+For a complete list of additional settings and configuration details, visit the [Rivulex documentation](https://github.com/raw-leak/rivulex).
+
+#### Configure in `main.ts`
 Configure the custom transport strategy in your NestJS application's `main.ts`:
 
 ```typescript
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions } from '@nestjs/microservices';
-import { AppModule } from './app.module';
 import { RivulexTransport, RivulexSubscriberConfig } from 'nestjs-rivulex';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -73,14 +85,15 @@ async function bootstrap() {
 bootstrap();
 ```
 
-## Examples
+#### Custom Logger
 
+You can pass a custom logger to the `RivulexTransport` constructor. The logger should implement NestJS’s `Logger` interface or any custom logger service that adheres to the same API.
+
+#### Examples
 In this section, we will explore different ways of defining handlers in `nestjs-rivulex` using a single abstraction for a specific stream and a single abstraction with StreamAction decorators handling different actions for different streams.
 
-<details>
-<summary>More on Examples</summary>
 
-### Single Abstraction for a Specific Stream
+##### Single Abstraction for a Specific Stream
 In this example, we use the `@Stream` decorator to define a single abstraction that handles multiple actions within a specific stream with `@Action` decorators. This approach is ideal when you want to organize event handlers for all actions associated with a particular stream in one place.
 
 ```typescript
@@ -120,7 +133,7 @@ export class UsersHandlers {
 }
 ```
 
-### Single Abstraction Handling Actions for Different Streams
+##### Single Abstraction Handling Actions for Different Streams
 In this example, we use the @StreamAction decorator to define a single abstraction that handles actions for different streams. This approach is useful when you need to manage event handlers for various streams in a single class, avoiding the need to create separate layers for each stream.
 
 ```typescript
@@ -157,6 +170,48 @@ export class EventHandlers {
 }
 
 ```
+### Integration with Trimmer
+You can configure the Trimmer to be initiated with the `RivulexTransport` custom transport strategy for the `RivulexTransport`. This ensures that old messages are automatically trimmed while subscribing to events.
+
+#### Usage
+
+
+```typescript
+import { NestFactory } from '@nestjs/core';
+import { MicroserviceOptions } from '@nestjs/microservices';
+import { RivulexTransport, RivulexSubscriberConfig } from 'nestjs-rivulex';
+import { AppModule } from './app.module';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  const rivulexConfig: RivulexSubscriberConfig = {
+    redis: {
+      host: 'localhost',
+      port: 6379,
+    },
+    group: 'group',
+    trimmer: { 👈🏻
+      streams: ['users'],
+      group: 'group',
+      intervalTime: 43200000, // 12 hours
+      retentionPeriod: 604800000, // 7 days
+    },
+  };
+
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    AppModule,
+    {
+      strategy: new RivulexTransport(rivulexConfig),
+    },
+  );
+
+  await app.listen();
+}
+
+bootstrap();
+```
+
 </details>
 
 ## Decorators
@@ -164,7 +219,7 @@ export class EventHandlers {
 `nestjs-rivulex` provides a comprehensive set of decorators to simplify and abstract the management of stream subscriptions, associating events with specific actions, and working with event parameters. These decorators help you organize your code in a clean and intuitive way, making it easier to define and handle events in your NestJS applications.
 
 <details>
-<summary>More on Decorators</summary>
+<summary>Read more on Decorators</summary>
 
 ### Class Decorators
 **`@Stream(streamName: string)`** Decorate a class to specify the Redis stream name. This decorator indicates that the class contains methods to handle events from the specified Redis stream.
@@ -347,18 +402,211 @@ export class UsersHandlers {
 ```
 </details>
 
-## Configuration
+## Rivulex Publisher
 
-### `RivulexSubscriberConfig`
+The `RivulexPublisherModule` provides a NestJS abstraction over the Rivulex Publisher, making it easy to integrate the Rivulex messaging system into your NestJS applications. 
+It supports both synchronous and asynchronous configuration and exposes the `RivulexPublisherService` for publishing events.
 
-- **`redis`**: Configuration for the Redis connection, including options such as host, port, and authentication details.
-- **Additional Options**: Customize settings like `clientId`, `group`, `processTimeout`, `processConcurrency`, `fetchBatchSize`, `blockTime`, and `retries` according to your application's needs.
+<details>
+<summary>Read more on Rivulex Publisher</summary>
 
-For a complete list of additional settings and configuration details, visit the [Rivulex documentation](https://github.com/raw-leak/rivulex).
+### Overview
+The `RivulexPublisherModule` allows you to configure the Rivulex Publisher within your NestJS application using either the `forRoot` or `forRootAsync` methods. It provides seamless integration with NestJS's dependency injection system and supports various configuration options to customize the behavior of the Rivulex Publisher.
 
-### Custom Logger
+### Configuration
 
-You can pass a custom logger to the `RivulexTransport` constructor. The logger should implement NestJS’s `Logger` interface or any custom logger service that adheres to the same API.
+#### Synchronous Configuration
+Use the `forRoot` method to configure the Rivulex Publisher with static configuration options.
+
+```typescript
+import { Module } from '@nestjs/common';
+import { RivulexModule } from 'nestjs-rivulex';
+
+@Module({
+  imports: [
+    RivulexModule.forRoot({
+      redis: { host: 'localhost', port: 6379 },
+      group: 'my-group',
+      defaultStream: 'my-default-stream',
+    }),
+  ],
+  controllers: [],
+  providers: [],
+})
+export class AppModule {}
+```
+
+#### Asynchronous Configuration
+Use the `forRootAsync` method to configure the Rivulex Publisher with dynamic configuration options, such as those provided by a configuration service.
+```typescript
+import { Module } from '@nestjs/common';
+import { RivulexModule } from 'nestjs-rivulex';
+
+@Module({
+  imports: [
+    RivulexModule.forRootAsync({
+      useFactory: async () => ({
+        redis: { host: 'localhost', port: 6379 },
+        group: 'my-group',
+        defaultStream: 'my-default-stream',
+      }),
+      inject: [],
+    }),
+  ],
+  controllers: [],
+  providers: [],
+})
+export class AppModule {}
+
+```
+
+### Usage
+Once the `RivulexPublisherModule` is configured, you can inject the `RivulexPublisherService` into your services or controllers to publish events.
+```typescript
+import { Injectable } from '@nestjs/common';
+import { RivulexPublisherService } from 'nestjs-rivulex';
+
+@Injectable()
+export class MyService {
+  constructor(private readonly publisher: RivulexPublisherService) {}
+
+  async publishEvent() {
+    await this.publisher.publish('my-event', { id: '123', data: 'example' });
+  }
+}
+```
+
+### Integration with Trimmer
+You can configure the `Trimmer` to be initiated with the `RivulexPublisherModule`. This ensures that old messages are automatically trimmed while publishing events.
+
+#### Usage
+To configure the Trimmer within the `RivulexPublisherModule`, include the trimmer configuration in the `forRoot` or `forRootAsync` methods:
+```typescript
+import { Module } from '@nestjs/common';
+import { RivulexModule } from 'nestjs-rivulex';
+
+@Module({
+  imports: [
+    RivulexModule.forRoot({
+      redis: { host: 'localhost', port: 6379 },
+      group: 'my-group',
+      defaultStream: 'my-default-stream',
+      trimmer: { 👈🏻
+        streams: ['my-default-stream'],
+        group: 'my-group',
+        intervalTime: 86400000, // 24 hours
+        retentionPeriod: 604800000, // 7 days
+      },
+    }),
+  ],
+  controllers: [],
+  providers: [],
+})
+export class AppModule {}
+```
+Or with `forRootAsync`:
+```typescript
+import { Module } from '@nestjs/common';
+import { RivulexModule } from 'nestjs-rivulex';
+
+@Module({
+  imports: [
+    RivulexModule.forRootAsync({
+      useFactory: async () => ({
+        redis: { host: 'localhost', port: 6379 },
+        group: 'my-group',
+        trimmer: { 👈🏻
+          channels: ['users'],
+          intervalTime: 43200000, // 12 hours
+          retentionPeriod: 604800000, // 7 days
+        },
+      }),
+      inject: [],
+    }),
+  ],
+  controllers: [],
+  providers: [],
+})
+export class AppModule {}
+```
+In this example, the Trimmer is configured as part of the Subscriber configuration. When the Subscriber starts, it also starts the trimming process for the specified channels.
+
+### For More Details
+For more detailed information about the Rivulex Publisher, please refer to the [original Rivulex repository](https://github.com/raw-leak/rivulex?tab=readme-ov-file#publisher).
+
+</details>
+
+Understood. Here's the updated documentation that reflects that the `RivulexTrimmerService` starts automatically and does not need to be accessed directly by the developer:
+
+## Rivulex Trimmer
+
+The `RivulexTrimmerModule` provides a NestJS abstraction over the Rivulex Trimmer, allowing you to manage the trimming of old messages from Redis streams as a standalone service. This ensures that messages older than a specified retention period are removed at regular intervals. The trimming process is distributed and coordinated using Redis to avoid conflicts between multiple instances.
+
+<details>
+<summary>Read more on Rivulex Trimmer</summary>
+
+### Overview
+
+The `RivulexTrimmerModule` can be configured and started independently of the `Publisher` and `Subscriber` modules. It provides seamless integration with NestJS's dependency injection system and supports both synchronous and asynchronous configuration. The trimming process starts automatically and does not require any direct interaction from the developer.
+
+### Configuration
+
+#### Synchronous Configuration
+
+Use the `forRoot` method to configure the `RivulexTrimmerModule` with static configuration options.
+
+```typescript
+import { Module } from '@nestjs/common';
+import { RivulexTrimmerModule } from 'nestjs-rivulex';
+
+@Module({
+  imports: [
+    RivulexTrimmerModule.forRoot({
+      redis: { host: 'localhost', port: 6379 },
+      group: 'my-group',
+      streams: ['my-default-stream'],
+      intervalTime: 86400000, // 24 hours
+      retentionPeriod: 604800000, // 7 days
+    }),
+  ],
+  controllers: [],
+  providers: [],
+})
+export class AppModule {}
+```
+
+#### Asynchronous Configuration
+
+Use the `forRootAsync` method to configure the `RivulexTrimmerModule` with dynamic configuration options, such as those provided by a configuration service.
+
+```typescript
+import { Module } from '@nestjs/common';
+import { RivulexTrimmerModule } from 'nestjs-rivulex';
+
+@Module({
+  imports: [
+    RivulexTrimmerModule.forRootAsync({
+      useFactory: async () => ({
+        redis: { host: 'localhost', port: 6379 },
+        group: 'my-group',
+        streams: ['my-default-stream'],
+        intervalTime: 86400000, // 24 hours
+        retentionPeriod: 604800000, // 7 days
+      }),
+      inject: [],
+    }),
+  ],
+  controllers: [],
+  providers: [],
+})
+export class AppModule {}
+```
+
+### Usage
+
+Once the `RivulexTrimmerModule` is configured, the `RivulexTrimmerService` will manage the trimming process automatically. The service starts the trimming process when the application starts and stops it when the application shuts down. There is no need to interact with the `RivulexTrimmerService` directly.
+
+</details>
 
 ## Contributing
 
@@ -370,4 +618,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-For any issues or support, please open an issue on the [GitHub repository](https://github.com/yourusername/nestjs-rivulex/issues).
+For any issues or support, please open an issue on the [GitHub repository](https://github.com/raw-leak/nestjs-rivulex/issues).
