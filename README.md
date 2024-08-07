@@ -4,8 +4,13 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Last Tag](https://img.shields.io/github/v/tag/raw-leak/nestjs-rivulex?label=Last%20Tag)
-![Version](https://img.shields.io/npm/v/nestjs-rivulex)
 ![Contributors](https://img.shields.io/github/contributors/raw-leak/nestjs-rivulex)
+![Size](https://img.shields.io/github/repo-size/raw-leak/nestjs-rivulex)
+![GitHub last commit](https://img.shields.io/github/last-commit/raw-leak/nestjs-rivulex)
+![Maintenance](https://img.shields.io/maintenance/yes/2024)
+[![npm](https://img.shields.io/npm/v/nestjs-rivulex.svg)](https://www.npmjs.com/package/nestjs-rivulex)
+![Coverage](https://img.shields.io/codecov/c/github/raw-leak/nestjs-rivulex)
+
 </div>
 
 **Rivulex NestJS** provides custom transport, publisher, and trimmer abstractions for integrating [**Rivulex**](https://github.com/raw-leak/rivulex) with NestJS applications. It leverages Rivulex’s Redis Streams-based messaging system and offers an easy-to-use abstraction for event-driven communication in NestJS.
