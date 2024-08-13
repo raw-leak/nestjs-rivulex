@@ -18,7 +18,7 @@ export function createMockEvent<P = any, H = Record<any, any>>(overrides: Partia
     const defaultEvent: Event<P, H> = {
         id: 'default-id',
         action: 'default-action',
-        channel: 'default-channel',
+        stream: 'default-channel',
         attempt: 0,
         payload: {} as P,
         ack: jest.fn(),
