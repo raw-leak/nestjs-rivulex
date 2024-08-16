@@ -1,11 +1,5 @@
 import { Headers } from 'rivulex';
-
-import { EventId } from '../../lib/decorators/event-id.decorator';
-import { EventPayload } from '../../lib/decorators/event-payload.decorator';
-import { EventAttempt } from '../../lib/decorators/event-attempt.decorator';
-import { EventHeaders } from '../../lib/decorators/event-headers.decorator';
-import { EventAck } from '../../lib/decorators/event-ack.decorator';
-
+import { EventId, EventPayload, EventAttempt, EventHeaders, EventAck } from '../../lib/subscriber/decorators';
 import { createMockEvent, createMockExecutionContext, getParamDecoratorFactory } from './decorators.utils';
 
 describe('Event Decorators', () => {
