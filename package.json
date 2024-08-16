@@ -50,7 +50,7 @@
   "dependencies": {
     "@nestjs/common": "^10.3.10",
     "@nestjs/microservices": "^10.3.10",
-    "rivulex": "1.0.0-beta.29"
+    "rivulex": "1.0.0-beta.30"
   },
   "devDependencies": {
     "@nestjs/testing": "^10.3.10",
