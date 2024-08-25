@@ -44,6 +44,7 @@ jobs:
           echo "Determined bump type: $BUMP"
 
       - name: Publish to npm (only for major/minor bumps)
+        if: steps.version_bump.outputs.bump_type != 'patch'
         run: |
           if [ "${{ steps.version_bump.outputs.bump_type }}" != "patch" ]; then
             echo "Publishing to npm as bump_type is ${BUMP_TYPE}"
