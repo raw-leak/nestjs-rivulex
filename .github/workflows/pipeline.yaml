@@ -20,6 +20,18 @@ jobs:
           node-version: 20
           registry-url: https://registry.npmjs.org
 
+      - name: Install dependencies
+        run: npm install
+
+      - name: Start Redis
+        run: docker run -d --name redis-for-tests -p 6379:6379 redis
+
+      - name: Run tests
+        run: npm run test:ci
+
+      - name: Stop Redis
+        run: docker stop redis-for-tests && docker rm redis-for-tests
+      
       - name: Determine version bump
         id: version_bump
         run: |
@@ -28,27 +40,44 @@ jobs:
       
           # Determine if there are any commit messages that indicate a major or minor bump
           first_line=$(git log -1 --pretty=%B)
-          if [[ "$first_line" =~ ^minor: ]]; then
-            BUMP="minor"
-          elif [[ "$first_line" =~ ^major: ]]; then
+
+          if [[ "$first_line" =~ ^BREAKING CHANGE: ]]; then
             BUMP="major"
+          elif [[ "$first_line" =~ ^feat:|^hotfix: ]]; then
+            BUMP="minor"
+          elif [[ "$first_line" =~ ^hotfix:|^fix:|^docs:|^ref:|^perf:|^chore: ]]; then
+            BUMP="patch"
           else
             BUMP="patch"
           fi
-      
+
           # Bump the version using npm version
           NEW_VERSION=$(npm version $BUMP --no-git-tag-version)
           echo "New version: $NEW_VERSION"
           echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
           echo "bump_type=$BUMP" >> $GITHUB_OUTPUT
           echo "Determined bump type: $BUMP"
+      
+      - name: Commit and push version bump
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          NEW_VERSION=${{ steps.version_bump.outputs.new_version }}
+          BUMP_TYPE=${{ steps.version_bump.outputs.bump_type }}
+          git commit -am "
+            ${# Check for BREAKING CHANGE and adjust message accordingly}
+            if [[ \"$first_line\" =~ ^BREAKING CHANGE: ]]; then
+              echo "BREAKING CHANGE:"
+            else
+              echo "chore($BUMP_TYPE):"
+            fi
+            echo " Bump version to $NEW_VERSION"
+          "
+          git push origin main
 
       - name: Publish to npm (only for major/minor bumps)
-        if: steps.version_bump.outputs.bump_type != 'patch'
-        run: |
-          if [ "${{ steps.version_bump.outputs.bump_type }}" != "patch" ]; then
-            echo "Publishing to npm as bump_type is ${BUMP_TYPE}"
-          else
-            echo "Skipping publish as bump_type is patch"
-          fi
-    
+        if: steps.version_bump.outputs.bump_type == 'minor' || steps.version_bump.outputs.bump_type == 'major'
+        run: npm run build && npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
