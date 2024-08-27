@@ -1,7 +1,8 @@
 
 <div align="center">
   <h1>Rivulex NestJS [in-progress]</h1>
-
+  
+[![CI](https://github.com/raw-leak/nestjs-rivulex/actions/workflows/pipeline.yaml/badge.svg?branch=main)](https://github.com/raw-leak/nestjs-rivulex/actions/workflows/pipeline.yaml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Last Tag](https://img.shields.io/github/v/tag/raw-leak/nestjs-rivulex?label=Last%20Tag)
 ![Contributors](https://img.shields.io/github/contributors/raw-leak/nestjs-rivulex)
