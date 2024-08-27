@@ -45,7 +45,7 @@
     "clean": "rm -rf dist",
     "build": "npm run clean && tsc",
     "lint": "eslint 'lib/**/*.{ts,tsx}'",
-    "test": "jest"
+    "test:ci": "jest --ci --runInBand"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.10",
